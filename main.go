@@ -34,7 +34,7 @@ func main() {
 		return
 	}
 
-	outputFile, err := os.Create("compressed_" + filename)
+	outputFile, err := os.Create("compressed_" + ratioStr + "_" + filename)
 	if err != nil {
 		fmt.Println("Error creating output file: ", err)
 		return
