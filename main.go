@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"image"
+	"image/gif"
 	"image/jpeg"
+	"image/png"
 	"os"
 	"strconv"
 )
@@ -41,9 +43,28 @@ func main() {
 
 	bufferedWriter := bufio.NewWriter(outputFile)
 	defer bufferedWriter.Flush()
-	err = jpeg.Encode(bufferedWriter, img, &jpeg.Options{Quality: int(ratio)})
-	if err != nil {
-		fmt.Println("Error encoding JPEG: ", err)
+
+	switch format {
+	case "jpeg":
+		err = jpeg.Encode(bufferedWriter, img, &jpeg.Options{Quality: int(ratio)})
+		if err != nil {
+			fmt.Println("Error encoding JPEG: ", err)
+			return
+		}
+	case "png":
+		err = png.Encode(bufferedWriter, img)
+		if err != nil {
+			fmt.Println("Error encoding PNG: ", err)
+			return
+		}
+	case "gif":
+		err = gif.Encode(bufferedWriter, img, &gif.Options{NumColors: int(ratio)})
+		if err != nil {
+			fmt.Println("Error encoding GIF: ", err)
+			return
+		}
+	default:
+		fmt.Println("Unsupported image format")
 		return
 	}
 
